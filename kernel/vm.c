@@ -62,6 +62,7 @@ kvminithart()
 //
 // The risc-v Sv39 scheme has three levels of page-table
 // pages. A page-table page contains 512 64-bit PTEs.
+// risc-v Sv39 方案有三级页表页。一个页表页包含 512 个 64 位 PTE。
 // A 64-bit virtual address is split into five fields:
 //   39..63 -- must be zero.
 //   30..38 -- 9 bits of level-2 index.
@@ -271,6 +272,7 @@ uvmdealloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz)
 
 // Recursively free page-table pages.
 // All leaf mappings must already have been removed.
+// 递归释放页表页面。所有叶映射必须已被删除。
 void
 freewalk(pagetable_t pagetable)
 {
@@ -291,6 +293,7 @@ freewalk(pagetable_t pagetable)
 
 // Free user memory pages,
 // then free page-table pages.
+// 释放用户内存页，然后释放页表页。
 void
 uvmfree(pagetable_t pagetable, uint64 sz)
 {
@@ -305,6 +308,7 @@ uvmfree(pagetable_t pagetable, uint64 sz)
 // physical memory.
 // returns 0 on success, -1 on failure.
 // frees any allocated pages on failure.
+// 给定父进程的页表，将其内存复制到子进程的页表中。复制页表和物理内存。成功时返回 0，失败时返回 -1。失败时释放所有分配的页面。
 int
 uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
 {
@@ -337,6 +341,7 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
 
 // mark a PTE invalid for user access.
 // used by exec for the user stack guard page.
+// 将 PTE 标记为对用户访问无效。由 exec 用于用户堆栈保护页面。
 void
 uvmclear(pagetable_t pagetable, uint64 va)
 {
@@ -350,6 +355,7 @@ uvmclear(pagetable_t pagetable, uint64 va)
 
 // Copy from kernel to user.
 // Copy len bytes from src to virtual address dstva in a given page table.
+// 从内核复制到用户。将 len 字节从 src 复制到给定页表中的虚拟地址 dstva。
 // Return 0 on success, -1 on error.
 int
 copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
@@ -375,6 +381,7 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
 
 // Copy from user to kernel.
 // Copy len bytes to dst from virtual address srcva in a given page table.
+// 从用户复制到内核。将 len 字节从给定页表中的虚拟地址 srcva 复制到 dst。
 // Return 0 on success, -1 on error.
 int
 copyin(pagetable_t pagetable, char *dst, uint64 srcva, uint64 len)
