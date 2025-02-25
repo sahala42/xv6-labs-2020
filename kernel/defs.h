@@ -64,6 +64,7 @@ void*           kalloc(void);
 void            kfree(void *);
 void            kinit(void);
 void            zst_freebytes(uint64* dst);     // 获取空闲内存
+int             freemen_size(void);             // 获取内存数量
 
 // log.c
 void            initlog(int, struct superblock*);
