@@ -1,6 +1,9 @@
 struct stat;
 struct rtcdate;
 
+struct sysinfo;         		   // 声明sysinfo结构体，使用户程序可以使用这个结构体
+
+
 // system calls
 int fork(void);                          // 创建一个新进程（子进程），子进程是父进程的副本。返回值：父进程返回子进程的 PID，子进程返回 0
 int exit(int) __attribute__((noreturn)); // 终止当前进程，并将状态值传递给父进程。返回值：退出的子进程的 PID
@@ -24,6 +27,7 @@ char* sbrk(int);                         // 增加或减少进程的堆空间。
 int sleep(int);                          // 让当前进程休眠指定的时间（以时钟滴答为单位）
 int uptime(void);                        // 获取系统启动以来的时间（以时钟滴答为单位）
 int trace(int);                          // 用户态程序可以找到trace系统调用的跳板入口函数
+int sysinfo(struct sysinfo *);           // 用户态程序可以找到sysinfo系统调用的跳板入口函数
 
 // ulib.c
 int stat(const char*, struct stat*);
