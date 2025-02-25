@@ -82,6 +82,7 @@ struct trapframe {
 
 enum procstate { UNUSED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
+
 // Per-process state
 struct proc {
   struct spinlock lock;
@@ -103,5 +104,5 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
-  uint64 kama_syscall_trace;   // 存储进程的系统调用跟踪掩码,用于记录哪些系统调用需要被跟踪
+  uint64 kama_syscall_trace;   // 存储进程的系统调用跟踪掩码,用于记录哪些系统调用需要被跟踪       
 };
