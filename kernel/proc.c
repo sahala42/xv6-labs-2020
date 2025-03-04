@@ -123,22 +123,16 @@ found:
     return 0;
   }
 
-    // 为新进程创建独立的内核页表，并将内核所需的各种映射添加到新页表上
-    p->zst_kernelpgtbl = zst_kvminit_newpgtbl();
+  // 为新进程创建独立的内核页表，并将内核所需的各种映射添加到新页表上
+  p->zst_kernelpgtbl = zst_kvminit_newpgtbl();
 
-    // 分配一个物理页，作为新进程的内核栈使用
-    char* pa = kalloc();
-    if (pa == 0)
-        panic("kallo");
-    uint64 va = KSTACK((int)0);     // 将内核栈映射到固定的逻辑地址上
-    kvmmap(p->zst_kernelpgtbl, va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
-    p->kstack = va;     // 记录内核栈的虚拟地址
-
-    // Set up new context to start executing at forkret,
-    // which returns to user space.
-    memset(&p->context, 0, sizeof(p->context));
-    p->context.ra = (uint64)forkret;
-    p->context.sp = p->kstack + PGSIZE;
+  // 分配一个物理页，作为新进程的内核栈使用
+  char* pa = kalloc();
+  if (pa == 0)
+      panic("kallo");
+  uint64 va = KSTACK((int)0);     // 将内核栈映射到固定的逻辑地址上
+  kvmmap(p->zst_kernelpgtbl, va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
+  p->kstack = va;     // 记录内核栈的虚拟地址
 
   // Set up new context to start executing at forkret,
   // which returns to user space.
