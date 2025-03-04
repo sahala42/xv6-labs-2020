@@ -160,8 +160,8 @@ int             uartgetc(void);
 // vm.c
 void            kvminit(void);
 void            kvminithart(void);
-uint64          kvmpa(uint64);
-void            kvmmap(uint64, uint64, uint64, int);
+uint64          kvmpa(pagetable_t, uint64);  // 做了修改，加了页表地址
+void            kvmmap(pagetable_t, uint64, uint64, uint64, int);   // 做了修改，加了页表地址
 int             mappages(pagetable_t, uint64, uint64, uint64, int);
 pagetable_t     uvmcreate(void);
 void            uvminit(pagetable_t, uchar *, uint);
@@ -178,7 +178,9 @@ uint64          walkaddr(pagetable_t, uint64);
 int             copyout(pagetable_t, uint64, char *, uint64);
 int             copyin(pagetable_t, char *, uint64, uint64);
 int             copyinstr(pagetable_t, char *, uint64, uint64);
-int             zst_vmprint(pagetable_t pagetable);
+int             zst_vmprint(pagetable_t pagetable); // 打印页表内容函数声明 
+pagetable_t     zst_kvminit_newpgtbl();             // 页表初始化映射
+void            zst_kvm_free_kernelpgtbl(pagetable_t);
 // plic.c
 void            plicinit(void);
 void            plicinithart(void);

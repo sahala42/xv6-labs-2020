@@ -1,4 +1,5 @@
 // Saved registers for kernel context switches.
+// 用于内核上下文切换的保存的寄存器
 struct context {
   uint64 ra;
   uint64 sp;
@@ -80,27 +81,31 @@ struct trapframe {
   /* 280 */ uint64 t6;
 };
 
+// 进程状态：未使用，正在睡眠，可运行，运行中，已终止
 enum procstate { UNUSED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state
 struct proc {
-  struct spinlock lock;
+  struct spinlock lock;  // 自旋锁，用于保护进程结构体中的共享数据
 
   // p->lock must be held when using these:
-  enum procstate state;        // Process state
-  struct proc *parent;         // Parent process
-  void *chan;                  // If non-zero, sleeping on chan
-  int killed;                  // If non-zero, have been killed
-  int xstate;                  // Exit status to be returned to parent's wait
-  int pid;                     // Process ID
+  // 以下字段在访问或修改时，必须持有 p->lock，以确保并发安全
+  enum procstate state;        // Process state 一个枚举类型
+  struct proc *parent;         // Parent process  指向父进程指针
+  void *chan;                  // If non-zero, sleeping on chan 如果非零，正在某个通道上睡眠
+  int killed;                  // If non-zero, have been killed 
+  int xstate;                  // Exit status to be returned to parent's wait  进程的退出状态码
+  int pid;                     // Process ID  进程的唯一标识
 
   // these are private to the process, so p->lock need not be held.
-  uint64 kstack;               // Virtual address of kernel stack
-  uint64 sz;                   // Size of process memory (bytes)
-  pagetable_t pagetable;       // User page table
-  struct trapframe *trapframe; // data page for trampoline.S
-  struct context context;      // swtch() here to run process
-  struct file *ofile[NOFILE];  // Open files
-  struct inode *cwd;           // Current directory
-  char name[16];               // Process name (debugging)
+  // 以下字段是进程私有的，访问或修改时不需要持有 p->lock
+  uint64 kstack;               // Virtual address of kernel stack  内核栈的虚拟地址
+  uint64 sz;                   // Size of process memory (bytes)   进程内存的大小（字节）
+  pagetable_t pagetable;       // User page table                  用户页表的指针，页表用于将虚拟地址映射到物理地址
+  struct trapframe *trapframe; // data page for trampoline.S       指向trapfram的指针
+  struct context context;      // swtch() here to run process      当进程切换时，当前 CPU 的寄存器状态会被保存到 context 中，以便稍后恢复
+  struct file *ofile[NOFILE];  // Open files                       进程打开的文件表  NOFILE 是常量：一个进程最多可以打开的文件数
+  struct inode *cwd;           // Current directory                指向当前工作目录的 inode 是文件系统中表示文件或目录的数据结构。
+  char name[16];               // Process name (debugging)         进程的名称
+  pagetable_t zst_kernelpgtbl; // 存储进程独享的内核态页表
 };
