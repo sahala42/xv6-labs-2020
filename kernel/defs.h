@@ -180,7 +180,14 @@ int             copyin(pagetable_t, char *, uint64, uint64);
 int             copyinstr(pagetable_t, char *, uint64, uint64);
 int             zst_vmprint(pagetable_t pagetable); // 打印页表内容函数声明 
 pagetable_t     zst_kvminit_newpgtbl();             // 页表初始化映射
-void            zst_kvm_free_kernelpgtbl(pagetable_t);
+void            zst_kvm_free_kernelpgtbl(pagetable_t); // 释放内核页表栈
+int             zst_kvmcopymappings(pagetable_t src, pagetable_t dst, uint64 start, uint64 sz); // 拷贝页表项，不拷贝实际的物理页内存
+uint64          zst_kvmdealloc(pagetable_t pagetable, uint64 oldsz, uint64 newsz); // 将程序内存从 oldsz 缩减到 newsz，但不释放实际内存
+
+// vmcopyin.c
+int             copyin_new(pagetable_t, char*, uint64, uint64);
+int             copyinstr_new(pagetable_t, char*, uint64, uint64);
+
 // plic.c
 void            plicinit(void);
 void            plicinithart(void);
