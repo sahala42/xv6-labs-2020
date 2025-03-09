@@ -7,7 +7,7 @@
 
 K=kernel
 U=user
-
+# 这里是汇编文件的声明
 OBJS = \
   $K/entry.o \
   $K/start.o \
@@ -35,7 +35,8 @@ OBJS = \
   $K/sysfile.o \
   $K/kernelvec.o \
   $K/plic.o \
-  $K/virtio_disk.o
+  $K/virtio_disk.o\
+  $K/asmdemo.o\
 
 ifeq ($(LAB),pgtbl)
 OBJS += \
@@ -175,7 +176,6 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
-
 
 
 
