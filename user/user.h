@@ -23,6 +23,8 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int sigalarm(int ticks, void (*handler)()); // 设置时钟相关属性
+int sigreturn(void);                        // 恢复到中断前
 
 // ulib.c
 int stat(const char*, struct stat*);
