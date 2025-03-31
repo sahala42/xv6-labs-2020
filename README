@@ -43,3 +43,6 @@ You will need a RISC-V "newlib" tool chain from
 https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
 riscv64-softmmu. Once they are installed, and in your shell
 search path, you can run "make qemu".
+
+// sahala42 
+该实验中，lab8-lock实验中出现的问题，其中提出的方法该blog解释的最好（https://blog.miigon.net/posts/s081-lab8-locks/）
